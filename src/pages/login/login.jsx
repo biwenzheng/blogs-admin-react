@@ -5,12 +5,36 @@ import Logo from '../../assets/logo.png'
 const Item = Form.Item;
 
  class Login extends Component {
+
   handleSubmit = (event) => {
+
     event.preventDefault();
-    const form = this.props.form;
-    const values = form.getFieldsValue();
-    console.log("handleSubmit():",values);
+    //对所有的表单字段进行验证
+    this.props.form.validateFields((err, values) => {
+      // 成功
+      if (!err) {
+        console.log('提交登录的ajax请求 ', values);
+      }
+    });
+    console.log("12314");
+  };
+  /*
+    对密码进行自定义验证,callback必须写，成功callback()，失败callback('xxx')
+  */ 
+  validatePwd = (rule, value, callback) => {
+    if( !value ){
+      callback("Please input your password!")
+    }else if(value.length < 4){
+      callback("密码不能小于4位")
+    }else if(value.length > 12){
+      callback("密码不能大于12位")
+    }else if(!/^[a-zA-Z0-9_]+$/.test(value)){
+      callback("密码必须是英文、数字或者下划线组成")
+    }else{
+      callback();
+    }
   }
+
   render(){
     //等到form对象
     const form = this.props.form;
@@ -26,7 +50,15 @@ const Item = Form.Item;
         <Form onSubmit={this.handleSubmit} className="login-form">
           <Item>
           {
-            getFieldDecorator('username',{})(
+            getFieldDecorator('username',{
+              //申明式验证：直接使用被人定义好的验证规则进行验证
+              rules: [
+                { required: true, message: 'Please input your username!' },
+                { min: 4, message: '用户名不得小于4位' },
+                { max: 12, message: '用户名不得大于12位' },
+                { pattern:/^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或者下划线组成' },
+              ],
+            })(
               <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="Username"
@@ -37,7 +69,11 @@ const Item = Form.Item;
           </Item>
           <Item>
             {
-               getFieldDecorator('password',{})(
+               getFieldDecorator('password',{
+                 rules:[
+                   { validator:this.validatePwd }
+                 ]
+               })(
                 <Input
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   type="password"
@@ -49,7 +85,10 @@ const Item = Form.Item;
           </Item>
           <Item>
             {
-               getFieldDecorator('remember',{})(
+               getFieldDecorator('remember',{
+                valuePropName: 'checked',
+                initialValue: true,
+               })(
                   <Checkbox>Remember me</Checkbox> 
                )
             }
