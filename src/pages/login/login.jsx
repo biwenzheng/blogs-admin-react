@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import './login.scss'
-import Logo from '../../assets/logo.png'
+import Logo from '../../assets/images/logo.png'
 const Item = Form.Item;
 
  class Login extends Component {
