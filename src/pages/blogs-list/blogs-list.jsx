@@ -1,65 +1,26 @@
 import React, {Component} from 'react'
 import { List, Avatar } from 'antd';
-
+import axios from 'axios';
 import './blogs-list.scss'
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  
-  
-];
+ const data = [];
 class BlogsList extends Component {
+  constructor(props){
+    super(props)
+    this.state={
+      data: []
+    };
+  }
 
-  
+  componentDidMount(){
+    const _this=this;
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(function(response){
+      console.log(response.data)
+      _this.setState({
+         data:response.data.title
+      });
+    })
+  }
   render() {
     
     return (
@@ -72,7 +33,7 @@ class BlogsList extends Component {
                 <List.Item.Meta
                   avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                   title={<a href="https://ant.design">{item.title}</a>}
-                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                  description={item.body}
                 />
               </List.Item>
               )}
