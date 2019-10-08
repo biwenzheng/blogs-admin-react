@@ -17,7 +17,7 @@ class BlogsList extends Component {
     .then(function(response){
       console.log(response.data)
       _this.setState({
-         data:response.data.title
+         data:response.data
       });
     })
   }
